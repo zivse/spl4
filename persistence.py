@@ -27,7 +27,6 @@ class order(object):
 
 # functions dte
 
-
 class _hats:
     def __init__(self, conn):
         self._conn = conn
@@ -41,7 +40,8 @@ class _hats:
         c.execute(
             "SELECT id, topping, supplier, quantity FROM hats WHERE topping = ?", [topping])
         return_hat = c.fetchone()
-        if return_hat == None:
+        print(f"TRILILI TRALALA {return_hat}")
+        if return_hat is None:
             return None
         else:
             return hat(*return_hat)
@@ -52,11 +52,12 @@ class _hats:
             "SELECT id, topping, supplier, quantity FROM hats WHERE topping = ?", [topping])
         return c.fetchall()
 
-    def orderhat(self, id):  # order the hats
-        hattoorder = self.find(id)
+    def orderhat(self, id, topping):  # order the hats
+        hattoorder = self.find(topping)
+        print(hattoorder)
         self._conn.execute("UPDATE hats SET quantity = ? WHERE id = ?", [
             hattoorder.quantity-1, hattoorder.id])
-        if(hattoorder.quantity-1 == 0):
+        if hattoorder.quantity-1 == 0:
             self._conn.execute(
                 "DELETE FROM hats WHERE id=?", [hattoorder.id])
 
@@ -108,5 +109,4 @@ class _repository(object):
 
 
 repo = _repository(sys.argv[4])
-repo.create_tables()
 atexit.register(repo._close)  # when we close the program

@@ -6,8 +6,9 @@ import sys
 
 
 def parser():
-    # repo.create_tables()
+    repo.create_tables()
     # parsing input file
+    print(f"HOLY CRAP {sys.argv[1]},{sys.argv[2]},{sys.argv[3]},{sys.argv[4]}")
     file = open(sys.argv[1], 'r')
     line = file.readline()
     num = line.split(",")
@@ -47,17 +48,13 @@ def parser():
         if topping[-1] == "\n":
             topping = topping[:-1]
         hat_list = repo.hats.findall(topping)
-        print(hat_list)
-        if len(hat_list) == 0 or hat_list == None:
-            continue
         min_supplier = hat_list[0][2]
         min_index = 0
         for i in range(1, len(hat_list)):
             if hat_list[i][2] < min_supplier:
                 min_supplier = hat_list[i][2]
                 min_index = i
-        print(f"id of requested hat is {hat_list[min_index][0]}")
-        repo.hats.orderhat(hat_list[min_index][0])
+        repo.hats.orderhat(hat_list[min_index][0], topping)
         repo.orders.insert(order(idcounter, location, topping))
         suppliername = repo.suppliers.find(min_supplier)
         filetowrite.write(topping+","+suppliername+","+location+"\n")
